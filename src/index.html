@@ -1,10 +1,36 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-  <title>Document</title>
-</head>
-<body>
-  <h2>Hello world!</h2>
-  <img src="./../assets/yoyogi.jpg">
-</body>
+<html>
+  <head>
+    <script
+    src="https://code.jquery.com/jquery-3.4.1.min.js"
+    integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo="
+    crossorigin="anonymous"></script>
+    <script type="text/javascript" src="dune.js"></script>
+    <title>Dune</title>
+  </head>
+  <body>
+    <h3>Select your class:</h3>
+    <form id="playerForm">
+      <select id="playerClass">
+        <option value="Harkonnen">Harkonnen</option>
+        <option value="Atreides">Atreides</option>
+        <option value="Benegesserit">Bene Gesserit</option>
+        <option value="Fremen">Fremen</option>
+      </select>
+      <button type="submit" class="submit">Submit</button>
+    </form>
+  </body>
 </html>
+
+
+
+  <!-- $('form#playerForm').on('submit', function(){
+    const inputClass = $("select#playerClass option:selected").val();
+    const playerStateControl = storeState();
+    if (inputClass === "Harkonnen")
+    {
+      playerStateControl(harkonnenCreation);
+      console.log(playerStateControl);
+    }
+
+  });
+}); -->
