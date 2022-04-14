@@ -88,11 +88,4 @@ $(document).ready(function () {
 
 
 
-warrior = changeState(strength)(agility)(speed)
-barbarian = changeState(strength)(agility)(speed)
-wizard = changeState(strength)(agility)(speed)(wisdom)
-
-
-const wizard = changeState("wisdom")(10)
-
 

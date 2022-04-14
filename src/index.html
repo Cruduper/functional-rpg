@@ -8,9 +8,11 @@
     <title>Dune</title>
   </head>
   <body>
-    <h3>Select your class:</h3>
+  
     <form id="playerForm">
+    <h3>Select your class:</h3>
       <select id="playerClass">
+        <option value="Default" selected>Select your class</option>
         <option value="Harkonnen">Harkonnen</option>
         <option value="Atreides">Atreides</option>
         <option value="Benegesserit">Bene Gesserit</option>
@@ -18,6 +20,23 @@
       </select>
       <button type="submit" class="submit">Submit</button>
     </form>
+    <div id="stats">
+      <p id="house"></span></p>
+      <p id="strength"></p>
+      <p id="mind"></p>
+      <p id="spice"></p>
+      <p id="level"></p>
+      <p id="hp"></p>
+    </div>
+    <div id="enemyStats">
+      <p id="eHouse"></span></p>
+      <p id="eStrength"></p>
+      <p id="eMind"></p>
+      <p id="eSpice"></p>
+      <p id="elevel"></p>
+      <p id="eHp"></p>
+    </div>
+    <button class="levelUp">Level Up</button>
   </body>
 </html>
 

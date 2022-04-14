@@ -19,16 +19,20 @@ function characterCreation(house){
     return function (mind) {
       return function (cunning) {
         return function (spice) {
-          return function (hp) {
-            return (state) => ({
-              ...state,
-              ["house"]: state["house"] = house,
-              ["strength"]: state["strength"] = strength,
-              ["mind"]: state["mind"] = mind,
-              ["cunning"]: state["cunning"] = cunning,
-              ["spice"]: state["spice"] = spice,
-              ["hp"]: state["hp"] = hp
-            });
+          return function (maxHp){
+            return function(hp){
+              return (state) => ({
+                ...state,
+                ["house"]: state["house"] = house,
+                ["strength"]: state["strength"] = strength,
+                ["mind"]: state["mind"] = mind,
+                ["cunning"]: state["cunning"] = cunning,
+                ["spice"]: state["spice"] = spice,
+                ["maxHp"]: state["maxHp"] = maxHp,
+                ["hp"]: state["hp"] = hp,
+                ["level"]: state["level"] = 1
+              });
+            };
           };
         };
       };
@@ -36,30 +40,70 @@ function characterCreation(house){
   };
 }
 
-const changeState = (prop) => {
-  return (value) => {
-    return (state) => ({
-      ...state,
-      [prop]: state[prop] * 1.10;
-    });
-  };
+// const changeState = (prop) => {
+//   return (value) => {
+//     return (state) => ({
+//       ...state,
+//       [prop]: state[prop] + value
+//     });
+//   };
+// };
+
+const levelUp = () => {
+  return (state) => ({
+    ...state,
+    ["strength"]: Math.ceil(state["strength"] * 1.10),
+    ["mind"]: Math.ceil(state["mind"] * 1.10),
+    ["cunning"]: Math.ceil(state["cunning"] * 1.10),
+    ["spice"]: state["spice"] = 0,
+    ["maxHp"]: Math.ceil(state["maxHp"] * 1.10),
+    ["hp"]: Math.ceil(state["maxHp"] * 1.10),
+    ["level"] : state["level"] + 1
+  });
 };
 
-const harkonnenCreation = characterCreation("Harkonnen")(10)(5)(13)(0)(20);
-const atreidesCreation = characterCreation("Atreides")(10)(10)(10)(0)(15);
-const beneGessCreation = characterCreation("Bene Gesserit")(8)(15)(15)(0)(10);
-const fremenCreation = characterCreation("Fremen")(12)(7)(7)(0)(15);
+//[prop]: (state[prop] || 0) + value
+                                                    //(strength)(mind)(cunning)(spice)(maxHp)(hp)
+const harkonnenCreation = characterCreation("Harkonnen")(10)(5)(13)(0)(20)(20);
+const atreidesCreation = characterCreation("Atreides")(10)(10)(10)(0)(15)(15);
+const beneGessCreation = characterCreation("Bene Gesserit")(8)(15)(15)(0)(10)(10);
+const fremenCreation = characterCreation("Fremen")(12)(7)(7)(0)(15)(15);
+
+function displayStats(playerState, enemyState = null){
+  $("#house").text(`House: ${playerState.house}`);
+  $("#strength").text(`Strength ${playerState.strength}`);
+  $("#mind").text(`Mind: ${playerState.mind}`);
+  $("#spice").text(`spice: ${playerState.spice}`);
+  $("#level").text(`level: ${playerState.level}`);
+  $("#hp").text(`${playerState.hp} / ${playerState.maxHp} hp`);
+  if (enemyState != null){
+    $("#eHouse").text(`House: ${enemyState.house}`);
+    $("#eStrength").text(`Strength ${enemyState.strength}`);
+    $("#eMind").text(`Mind: ${enemyState.mind}`);
+    $("#eSpice").text(`spice: ${enemyState.spice}`);
+    $("#eLevel").text(`level: ${enemyState.level}`);
+    $("#eHp").text(`${enemyState.hp} / ${enemyState.maxHp} hp`);
+  }
+}
+function createEnemy(){
+  var enemyTypes = [harkonnenCreation, atreidesCreation, beneGessCreation, fremenCreation];
+  var randomNum = Math.floor(Math.random() * enemyTypes.length);
+  return enemyTypes[randomNum];
+}
+
+// $('select').on('change', function() {
+//   alert( this.value );
+// });
+
 
 
 $(document).ready(function () {
-  // const enemyStateControl = storeState();
-
-  $('form#playerForm').on('submit', function () {
-    event.preventDefault();
-    console.log("we in here");
+  const enemyStateControl = storeState();
+  const playerStateControl = storeState();
+  var playerState = {};
+  var enemyState = {};
+  $('select#playerClass').on('change', function () {
     const inputClass = $("select#playerClass option:selected").val();
-    const playerStateControl = storeState();
-    var playerState = {};
     if (inputClass === "Harkonnen") {
       playerState = playerStateControl(harkonnenCreation);
       console.log(playerState);
@@ -72,10 +116,35 @@ $(document).ready(function () {
       playerState = playerStateControl(beneGessCreation);
       console.log(playerState);
     }
-    else{
+    else if(inputClass === "Fremen"){
       playerState = playerStateControl(fremenCreation);
       console.log(playerState);
     }
+    // enemyState = enemyStateControl(createEnemy());
+    // console.log(enemyState);
+    if (inputClass === "Default"){
+      $("#stats").hide();
+    }
+    else{
+      displayStats(playerState);
+      $("#stats").show();
+    }
+  });
+
+  $("form#playerForm").on('submit', function(){
+    event.preventDefault();
+    $("#playerForm").hide();
+    enemyState = enemyStateControl(createEnemy());
+    displayStats(playerState, enemyState);
+    if(playerState.house === enemyState.house){
+      alert('Betrayal!');
+    }
+  });
+  
+  $(".levelUp").on('click', function(){
+    const leveler = levelUp();
+    playerState = playerStateControl(leveler);
+    displayStats(playerState);
   });
 });
 
@@ -96,9 +165,9 @@ $(document).ready(function () {
 // ***** special ability - 10 dmg - uses mind, and depletes mind attribute each battle(at end of battle, refresh mind)
 
 
-// **** special ability - on button press, charge = true, if charge = true, 0 dmg, display "charging ability" 
+// **** special ability - on button press, charge = true, if charge = true, 0 dmg, display "charging ability"
 
-// level system: 
+// level system:
 // level up with spice;
 // stats would go up
 // spice level = 0
