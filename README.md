@@ -1,6 +1,6 @@
 # _{Application Name}_
 
-#### By _**Brenna Lavin**_
+#### By _**Eric Crudup & Brenna Lavin**_
 
 #### _{Brief description of application}_
 
