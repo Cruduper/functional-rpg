@@ -10,8 +10,6 @@
 * CSS
 * JavaScript
 * jQuery
-* BootStrap
-* Jest
   
 ## Description
 
